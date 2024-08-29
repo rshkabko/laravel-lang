@@ -1,6 +1,6 @@
 <?php
 
-namespace Flamix\Lang
+namespace Flamix\Lang;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Routing\Router;
