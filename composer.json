@@ -1,0 +1,31 @@
+{
+    "name": "flamix/laravel-lang",
+    "homepage": "https://github.com/rshkabko/laravel-lang",
+    "description": "Laravel Language Detection.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Shkabko",
+            "email": "r.shkabko@flamix.email",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "laravel/framework": ">=10.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Flamix\\UI\\User\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Flamix\\Lang\\ServiceProvider"
+            ]
+        }
+    }
+}
