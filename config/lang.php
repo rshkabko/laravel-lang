@@ -11,7 +11,7 @@ return [
 
     'drivers' => [
         'get' => [
-//            \Flamix\Lang\Drivers\Cookies::class,
+            \Flamix\Lang\Drivers\Cookies::class,
             \Flamix\Lang\Drivers\AuthUser::class,
             \Flamix\Lang\Drivers\Browser::class,
         ],
