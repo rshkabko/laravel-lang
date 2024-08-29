@@ -6,7 +6,7 @@ class Cookies extends AbstractDriver implements Contracts\DetectInterface, Contr
 {
     public function detect(): ?string
     {
-        $lang = $_COOKIE['lang'] ?? null;
+        $lang = request()->cookie('lang');
         return $this->isAvailable($lang) ? $lang : null;
     }
 
