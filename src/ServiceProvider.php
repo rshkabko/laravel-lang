@@ -3,6 +3,7 @@
 namespace Flamix\Lang;
 
 use Flamix\Lang\Middleware\SetLang;
+use Flamix\Lang\Middleware\PrefixLang;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Routing\Router;
 
@@ -13,6 +14,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
         $router->aliasMiddleware('lang-set', SetLang::class);
+        $router->aliasMiddleware('lang-prefix', PrefixLang::class);
 
         if (config('lang.autoload', true)) {
             $this->app->booted(function () use ($router) {
