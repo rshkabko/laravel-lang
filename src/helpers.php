@@ -10,8 +10,6 @@ if (!function_exists('lang')) {
 if (!function_exists('lang_route')) {
     function lang_route($name, $parameters = [], $absolute = true)
     {
-        $lang = app()->getLocale();
-        $name = "{$lang}.{$name}";
-        return route($name, $parameters = [], $absolute = true);
+        return route(app()->getLocale() . '.' . $name, $parameters, $absolute);
     }
 }

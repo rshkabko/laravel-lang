@@ -9,6 +9,14 @@ return [
         'ua' => 'Українська',
     ],
 
+    // Accept-Language ISO code → available key (browsers send "uk" for Ukrainian)
+    'aliases' => [
+        'uk' => 'ua',
+    ],
+
+    // Redirect unmatched bare URLs (/about) to the locale prefix (/en/about)
+    'prefix_fallback' => env('LANG_PREFIX_FALLBACK', true),
+
     'drivers' => [
         'get' => [
             \Flamix\Lang\Drivers\Cookies::class,

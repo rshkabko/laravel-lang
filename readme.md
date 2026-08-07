@@ -58,6 +58,7 @@ lang()->set('ru');
 
 // Generate named route with locale prefix
 lang_route('dashboard'); // route("en.dashboard")
+lang_route('license', ['license_key' => $key]); // params are passed through
 ```
 
 ### Language switcher
@@ -106,6 +107,21 @@ Requires `Prefix` driver in your config:
     // ...
 ],
 ```
+
+### Bare-URL fallback
+
+With prefix-based routing, unprefixed URLs (`/about`, `/checkout`) don't match any route and 404. The fallback (enabled by default) redirects them to the detected locale (query string preserved, so UTM tags survive):
+
+```php
+// config/lang.php — disable if the app doesn't use prefix routing
+'prefix_fallback' => env('LANG_PREFIX_FALLBACK', true),
+```
+
+```
+GET /checkout?utm_source=x  →  302  /en/checkout?utm_source=x
+```
+
+No more hand-written redirect routes in `routes/web.php`. URLs that already carry a valid prefix but match nothing stay a plain 404.
 
 ## Drivers
 

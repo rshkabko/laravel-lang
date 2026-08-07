@@ -6,6 +6,7 @@ use Flamix\Lang\Middleware\SetLang;
 use Flamix\Lang\Middleware\PrefixLang;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -19,6 +20,14 @@ class ServiceProvider extends BaseServiceProvider
         if (config('lang.autoload', true)) {
             $this->app->booted(function () use ($router) {
                 $router->pushMiddlewareToGroup('web', 'lang-set');
+            });
+        }
+
+        // Redirect bare URLs (/about) to the locale prefix (/en/about).
+        // Registered after app routes boot so the catch-all stays last.
+        if (config('lang.prefix_fallback', true) && !$this->app->routesAreCached()) {
+            $this->app->booted(function () {
+                Route::fallback([\Flamix\Lang\Controllers\LangController::class, 'redirectToPrefix'])->middleware('web');
             });
         }
 

@@ -6,8 +6,7 @@ class Prefix extends AbstractDriver implements Contracts\DetectInterface
 {
     public function detect(): ?string
     {
-        $url = explode('/', $_SERVER['REQUEST_URI'] ?? '');
-        $lang = $url['1'] ?? null;
+        $lang = request()->segment(1);
         return $this->isAvailable($lang) ? $lang : null;
     }
 }
