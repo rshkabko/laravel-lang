@@ -14,7 +14,8 @@ return [
         'uk' => 'ua',
     ],
 
-    // Redirect unmatched bare URLs (/about) to the locale prefix (/en/about)
+
+    // lang_prefixes() adds a bare '' prefix: page routes exist unprefixed too and lang-prefix middleware redirects them (/about -> /en/about)
     'prefix_fallback' => env('LANG_PREFIX_FALLBACK', true),
 
     'drivers' => [

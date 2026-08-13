@@ -61,7 +61,7 @@ lang_route('dashboard'); // route("en.dashboard")
 lang_route('license', ['license_key' => $key]); // params are passed through
 
 // Locale prefixes for registering page routes
-lang_prefixes(); // ['en', 'ru', 'ua'] — plus '' when prefix_fallback is off
+lang_prefixes(); // ['en', 'ru', 'ua'] — plus '' when prefix_fallback is on
 ```
 
 ### Language switcher
@@ -111,29 +111,11 @@ Requires `Prefix` driver in your config:
 ],
 ```
 
-### Bare-URL fallback
+### Bare-URL redirect
 
-With prefix-based routing, unprefixed URLs (`/about`, `/checkout`) don't match any route and 404. The fallback (enabled by default) redirects them to the detected locale (query string preserved, so UTM tags survive):
-
-```php
-// config/lang.php — disable if the app doesn't use prefix routing
-'prefix_fallback' => env('LANG_PREFIX_FALLBACK', true),
-```
-
-```
-GET /checkout?utm_source=x  →  302  /en/checkout?utm_source=x
-```
-
-No more hand-written redirect routes in `routes/web.php`. URLs that already carry a valid prefix but match nothing stay a plain 404.
-
-### Middleware-only redirect (no global fallback)
-
-The fallback is a global catch-all: it also grabs unmatched `/api/*` or dashboard URLs and redirects them to a locale, which webhooks and API clients must never see. If the app has such areas, disable the fallback and register pages through `lang_prefixes()` — with `prefix_fallback` off it appends a bare `''` prefix, so the same group also registers unprefixed URLs and the `lang-prefix` middleware redirects them itself:
+With prefix-based routing, unprefixed URLs (`/about`, `/checkout`) match nothing and would 404. Register pages through `lang_prefixes()` — with `prefix_fallback` on (default) it appends a bare `''` prefix, so the same group also registers unprefixed URLs and the `lang-prefix` middleware redirects them to the detected locale (query string preserved, so UTM tags survive):
 
 ```php
-// config/lang.php
-'prefix_fallback' => false,
-
 // routes/web.php — one loop registers /en/about, /ru/about, /ua/about AND /about
 foreach (lang_prefixes() as $locale) {
     Route::group(['middleware' => 'lang-prefix', 'prefix' => $locale, 'as' => ($locale ?: 'bare').'.'], function () {
@@ -143,9 +125,16 @@ foreach (lang_prefixes() as $locale) {
 ```
 
 ```
-GET /about        →  302  /en/about
-GET /api/nope     →  404  (no locale redirect)
+GET /about?utm_source=x  →  302  /en/about?utm_source=x
+GET /api/nope            →  404  (only page routes redirect, never API or dashboards)
 ```
+
+```php
+// config/lang.php — turn off if the app doesn't want bare page URLs at all
+'prefix_fallback' => env('LANG_PREFIX_FALLBACK', true),
+```
+
+There is no global catch-all: a URL that matches no route is an honest 404.
 
 ## Drivers
 

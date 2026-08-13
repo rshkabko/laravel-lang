@@ -3,7 +3,6 @@
 namespace Flamix\Lang\Controllers;
 
 use Flamix\Lang\Drivers\Cookies;
-use Flamix\Lang\Drivers\Prefix;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -43,17 +42,6 @@ class LangController extends Controller
         $query = $request->getQueryString();
 
         return '/' . $this->get() . ($path !== '' ? '/' . $path : '') . ($query ? '?' . $query : '');
-    }
-
-    /**
-     * Fallback action: redirect a bare URL to its locale-prefixed version.
-     */
-    public function redirectToPrefix(Request $request): RedirectResponse
-    {
-        // Already prefixed and still unmatched — a real 404, don't loop
-        abort_if(app(Prefix::class)->detect(), 404);
-
-        return redirect()->to($this->prefixedUrl($request));
     }
 
     public function change(string $lang): RedirectResponse

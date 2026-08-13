@@ -10,14 +10,14 @@ if (!function_exists('lang')) {
 if (!function_exists('lang_prefixes')) {
     /**
      * Locale prefixes for registering page routes: ['en', 'ru', 'ua'].
-     * With prefix_fallback off adds a bare '' prefix, so the lang-prefix
-     * middleware redirects unprefixed URLs instead of the global fallback.
+     * With prefix_fallback on adds a bare '' prefix, so the same routes
+     * exist unprefixed and the lang-prefix middleware redirects them.
      */
     function lang_prefixes(): array
     {
         $prefixes = array_keys(config('lang.available', []));
 
-        if (!config('lang.prefix_fallback', true)) {
+        if (config('lang.prefix_fallback', true)) {
             $prefixes[] = '';
         }
 
