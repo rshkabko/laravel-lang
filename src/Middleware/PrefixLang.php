@@ -16,7 +16,9 @@ class PrefixLang
             return $next($request);
         }
 
-        // Hard Redirect to detected language, query string preserved
-        return redirect()->to(lang()->prefixedUrl($request));
+        // Permanent redirect to the detected language, query string preserved.
+        // 301 so search engines canonicalise the prefixed URL (/ua) instead of
+        // keeping the bare URL (/) as the homepage.
+        return redirect()->to(lang()->prefixedUrl($request), 301);
     }
 }
